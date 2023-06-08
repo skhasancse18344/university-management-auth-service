@@ -11,7 +11,7 @@
 
   "rules": {
     "no-unused-vars": "error",
-    "no-console":"error",
+    "no-console":"warn",
     "prefer-const":"error",
     "no-undef":"error",
     "no-unused-expressions":"error",
