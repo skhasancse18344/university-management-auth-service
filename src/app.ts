@@ -1,7 +1,8 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { UserRoutes } from './app/modules/users/users.route';
-import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import globalErrorHandler from './app/middleWares/globalErrorHandler';
+import { AcademicSemesterRoutes } from './app/modules/academicSemester/academicSemester.route';
 
 const app: Application = express();
 
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 //Application
 
 app.use('/api/v1/users/', UserRoutes);
+app.use('/api/v1/academicSemester', AcademicSemesterRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to the University Management');
