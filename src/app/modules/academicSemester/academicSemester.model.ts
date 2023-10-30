@@ -1,15 +1,12 @@
+import { StatusCodes } from 'http-status-codes';
 import { Schema, model } from 'mongoose';
-import {
-  IAcademicSemester,
-  IAcademicSemesterModel,
-} from './academicSemester.interface';
+import ApiError from '../../../errors/ApiError';
 import {
   academicSemesterCodes,
-  academicSemesterMonths,
   academicSemesterTitles,
+  acdemicSemesterMonths,
 } from './academicSemester.constant';
-import ApiError from '../../../errors/ApiError';
-import { StatusCodes } from 'http-status-codes';
+import { IAcademicSemester } from './academicSemester.interface';
 
 const academicSemesterSchema = new Schema<IAcademicSemester>(
   {
@@ -19,7 +16,7 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
       enum: academicSemesterTitles,
     },
     year: {
-      type: Number,
+      type: String,
       required: true,
     },
     code: {
@@ -30,12 +27,12 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
     startMonth: {
       type: String,
       required: true,
-      enum: academicSemesterMonths,
+      enum: acdemicSemesterMonths,
     },
     endMonth: {
       type: String,
       required: true,
-      enum: academicSemesterMonths,
+      enum: acdemicSemesterMonths,
     },
   },
   {
@@ -43,7 +40,6 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
   }
 );
 
-// Prevent and Handle Duplicate Academic Semester Entry
 academicSemesterSchema.pre('save', async function (next) {
   const isExist = await AcademicSemester.findOne({
     title: this.title,
@@ -52,14 +48,13 @@ academicSemesterSchema.pre('save', async function (next) {
   if (isExist) {
     throw new ApiError(
       StatusCodes.CONFLICT,
-      'Academic Semester already exists'
+      'Academic semester is already exist !'
     );
   }
   next();
 });
 
-// 3. Create a Model.
-export const AcademicSemester = model<
-  IAcademicSemester,
-  IAcademicSemesterModel
->('AcademicSemester', academicSemesterSchema);
+export const AcademicSemester = model<IAcademicSemester>(
+  'AcademicSemester',
+  academicSemesterSchema
+);
